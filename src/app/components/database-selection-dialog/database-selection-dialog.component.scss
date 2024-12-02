@@ -1,0 +1,207 @@
+.dialog-container {
+  padding: 2rem;
+  min-width: 450px;
+  background: #ffffff;
+  border-radius: 16px;
+}
+
+.dialog-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #000;
+    letter-spacing: -0.5px;
+  }
+
+  p {
+    color: #666;
+    margin: 0.5rem 0 0;
+    font-size: 1rem;
+  }
+}
+
+.database-select {
+  width: 100%;
+
+  ::ng-deep {
+    .mat-mdc-form-field-flex {
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      padding: 0 !important;
+      height: 48px !important;
+      align-items: center !important;
+      position: relative;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      border-radius: 12px;
+      padding: 0 !important;
+    }
+
+    .mat-mdc-form-field-outline {
+      display: none;
+    }
+
+    .mat-mdc-form-field-icon-prefix {
+      padding-left: 16px;
+      color: #999;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .mat-mdc-select-arrow-wrapper {
+      padding-right: 16px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .mat-mdc-form-field-infix {
+      padding: 0 12px !important;
+      height: 48px !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    .mat-mdc-select {
+      display: flex !important;
+      align-items: center !important;
+      height: 100% !important;
+    }
+
+    .mat-mdc-select-value {
+      display: flex !important;
+      align-items: center !important;
+      padding-left: 36px !important;
+    }
+
+    .mat-mdc-select-placeholder {
+      color: #666;
+      margin: 0 !important;
+      padding-left: 36px !important;
+    }
+
+    .mdc-floating-label {
+      display: none !important;
+    }
+  }
+}
+
+.database-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  height: 40px !important;
+
+  mat-icon {
+    color: #666;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .database-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    
+    .database-name {
+      font-weight: 500;
+      color: #000;
+      font-size: 0.9rem;
+      line-height: 1.2;
+    }
+
+    .database-value {
+      font-size: 0.75rem;
+      color: #666;
+      line-height: 1;
+    }
+  }
+}
+
+mat-dialog-actions {
+  margin-top: 2rem;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+
+  button {
+    min-width: 130px;
+    height: 48px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .cancel-button {
+    color: #666;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  .select-button {
+    background: #000000;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+
+    mat-icon {
+      font-size: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    &:not([disabled]):hover {
+      background: #1a1a1a;
+      transform: translateY(-1px);
+
+      mat-icon {
+        transform: translateX(4px);
+      }
+    }
+
+    &[disabled] {
+      background: #e0e0e0;
+      color: #999;
+    }
+  }
+}
+
+::ng-deep {
+  .mat-mdc-dialog-container {
+    --mdc-dialog-container-color: transparent;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .mat-mdc-select-panel {
+    border-radius: 12px !important;
+    background: #ffffff;
+    padding: 4px !important;
+    
+    mat-option {
+      border-radius: 6px !important;
+      height: 40px !important;
+      min-height: 40px !important;
+      
+      &:hover {
+        background: rgba(0, 0, 0, 0.04) !important;
+      }
+      
+      &.mat-mdc-option-active {
+        background: rgba(0, 0, 0, 0.08) !important;
+      }
+    }
+  }
+} 
