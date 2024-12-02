@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-
-interface Database {
-  name: string;
-  value: string;
-}
+import { Database } from '../../types/database.types';
+import { MOCK_DATABASES } from '../../constants/database.constants';
 
 @Component({
   selector: 'app-database-selection-dialog',
@@ -13,15 +10,7 @@ interface Database {
 })
 export class DatabaseSelectionDialogComponent {
   selectedDatabase: Database | null = null;
-  
-  // Dummy database options
-  databases: Database[] = [
-    { name: 'Customer Database', value: 'customer_db' },
-    { name: 'Product Database', value: 'product_db' },
-    { name: 'Sales Database', value: 'sales_db' },
-    { name: 'Inventory Database', value: 'inventory_db' },
-    { name: 'Employee Database', value: 'employee_db' }
-  ];
+  databases = MOCK_DATABASES;
 
   constructor(
     private dialogRef: MatDialogRef<DatabaseSelectionDialogComponent>

@@ -19,6 +19,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { DatabaseSelectionDialogComponent } from './components/database-selection-dialog/database-selection-dialog.component';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,7 @@ import { DatabaseSelectionDialogComponent } from './components/database-selectio
     MatSelectModule,
     FormsModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { } 

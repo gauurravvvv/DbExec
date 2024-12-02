@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { DatabaseSelectionDialogComponent } from '../../components/database-selection-dialog/database-selection-dialog.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -59,7 +60,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       organization: ['', [Validators.required]],
@@ -71,9 +73,25 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.loginForm.valid) {
-      this.showDatabaseSelection();
+      try {
+        const success = await this.authService.login({
+          organization: this.loginForm.get('organization')?.value,
+          username: this.loginForm.get('username')?.value,
+          password: this.loginForm.get('password')?.value
+        });
+
+        if (success) {
+          if (this.authService.isUser()) {
+            this.showDatabaseSelection();
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
+        }
+      } catch (error) {
+        console.error('Login failed:', error);
+      }
     }
   }
 
@@ -86,8 +104,7 @@ export class LoginComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Selected database:', result);
-        // TODO: Navigate to home screen
-        // this.router.navigate(['/home']);
+        this.router.navigate(['/dashboard']);
       }
     });
   }
