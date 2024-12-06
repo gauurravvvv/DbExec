@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 // NGX Bootstrap Imports
 import { ButtonsModule } from 'ngx-bootstrap/buttons';

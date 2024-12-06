@@ -6,6 +6,7 @@ import { LOGIN_PAGE_OPTIONS } from 'src/app/constants/global';
 import { LoginService } from '../auth.service';
 import { StorageType } from 'src/app/constants/storageType';
 import { GlobalService } from 'src/app/core/services/global.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -93,16 +94,14 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.loginForm).subscribe({
         next: (res) => {
           if (this.globalService.handleServiceResponse(res)) {
-            console.log('route to dashboard');
-            // this.router.navigateByUrl(URL_ROUTES.DASHBOARD);
+            console.log('route to dashboard')
           }
         },
         error: (error) => {
-          // Handle HTTP errors or error responses
-          const errorMessage = error.error || error;
+          const errorMessage = error.error?.message || 'Login failed';
           this.globalService.handleServiceResponse({
             status: false,
-            message: errorMessage.message || 'Login failed',
+            message: errorMessage,
             data: null
           }, true, true);
         }
@@ -116,7 +115,7 @@ export class LoginComponent implements OnInit {
       const charCode = text.charCodeAt(i) ^ this.encryptionKey.charCodeAt(i % this.encryptionKey.length);
       result += String.fromCharCode(charCode);
     }
-    return btoa(result); // Convert to base64
+    return btoa(result);
   }
 
   private decrypt(encryptedText: string): string {

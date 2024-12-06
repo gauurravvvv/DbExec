@@ -73,28 +73,32 @@ export class GlobalService {
 
   getTokenDetails(value: string) {
     const accessToken = StorageService.get(StorageType.ACCESS_TOKEN);
-    let decodeToken;
-    if (accessToken) {
-      decodeToken = JSON.parse(atob(accessToken.split('.')[1]));
-    } else {
+    if (!accessToken) {
       this.router.navigateByUrl('');
+      return null;
     }
-    let userRole = decodeToken.role;
-    let userName = decodeToken.username;
-    let organisationName = decodeToken.organsation;
-    let organisationId = decodeToken.organsationId;
 
-    switch (value) {
-      case 'decodeToken':
-        return decodeToken;
-      case 'role':
-        return userRole;
-      case 'username':
-        return userName;
-      case 'organisationName':
-        return organisationName;
-      case 'organisationId':
-        return organisationId;
+    try {
+      const decodeToken = JSON.parse(atob(accessToken.split('.')[1]));
+      
+      switch (value) {
+        case 'decodeToken':
+          return decodeToken;
+        case 'role':
+          return decodeToken?.role;
+        case 'username':
+          return decodeToken?.username;
+        case 'organisationName':
+          return decodeToken?.organsation;
+        case 'organisationId':
+          return decodeToken?.organsationId;
+        default:
+          return null;
+      }
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      this.router.navigateByUrl('');
+      return null;
     }
   }
 
@@ -135,7 +139,7 @@ export class GlobalService {
         background: result.status ? '#e8f5e9' : '#ffebee',
         color: result.status ? '#2e7d32' : '#c62828',
         iconColor: result.status ? '#43a047' : '#d32f2f'
-      });
+      })
     }
     
     return result.status;

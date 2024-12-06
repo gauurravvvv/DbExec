@@ -67,11 +67,6 @@ export class HttpRequestInterceptor implements HttpInterceptor {
 				StorageService.remove(StorageType.ACCESS_TOKEN);
 				return evt;
 			}
-			if (evt.body.status != true) {
-				this.handleError(evt.body.message);
-			} else {
-				return evt;
-			}
 		}
 		return evt;
 	}
