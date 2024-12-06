@@ -13,8 +13,8 @@ import { catchError, retry, map, finalize } from 'rxjs/operators';
 import { environment } from 'src/environments/environment.prod';
 import { LoadingService } from '../services/loading.service';
 import { Router } from '@angular/router';
-import { StorageService } from 'src/app/components/common/storage.service';
 import { StorageType } from 'src/app/constants/storageType';
+import { StorageService } from '../services/storage.service';
 
 
 @Injectable()

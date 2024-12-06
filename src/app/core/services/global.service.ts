@@ -3,9 +3,9 @@ import { AbstractControl, UntypedFormControl } from '@angular/forms';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { StorageService } from '../../components/common/storage.service';
 import { StorageType } from '../../constants/storageType';
 import Swal from 'sweetalert2';
+import { StorageService } from './storage.service';
 
 
 

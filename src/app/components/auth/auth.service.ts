@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AUTH } from 'src/app/constants/api';
-import { StorageService } from '../common/storage.service';
 import { GlobalService } from 'src/app/core/services/global.service';
 import { SessionStorageType } from 'src/app/constants/storageType';
 import { StorageType } from 'src/app/constants/storageType';
 import { ROLES } from 'src/app/constants/user.constant';
 import { map } from 'rxjs/operators';
+import { StorageService } from 'src/app/core/services/storage.service';
 
 @Injectable({
   providedIn: 'root',
