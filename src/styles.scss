@@ -1,17 +1,84 @@
-@use '@angular/material' as mat;
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
-html, body {
-  height: 100%;
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+/* Global dark theme variables */
+:root {
+  /* Dark theme colors (left side) */
+  --dark-bg-primary: #000000;
+  --dark-bg-secondary: #1a1a1a;
+  --dark-text-primary: #ffffff;
+  --dark-text-secondary: rgba(255, 255, 255, 0.7);
+  
+  /* Light theme colors (right side) */
+  --light-bg-primary: #ffffff;
+  --light-bg-secondary: #ffffff;
+  --light-text-primary: #000000;
+  --light-text-secondary: #666666;
+  
+  /* Form colors */
+  --input-bg: #ffffff;
+  --input-border: #e0e0e0;
+  --input-text: #000000;
+  --button-bg: #e9e9e9;
+  --button-text: #000000;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-.mat-mdc-form-field {
+.text-muted {
+  color: var(--dark-text-secondary) !important;
+}
+
+/* Override Bootstrap classes for dark theme */
+.form-control {
+  height: 48px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 15px;
+  background-color: var(--input-bg);
+  color: var(--input-text);
+
+  &:focus {
+    border-color: var(--input-border);
+    box-shadow: none;
+  }
+}
+
+.input-group-text {
+  background-color: var(--light-bg-primary);
+  border-color: var(--border-color);
+  color: var(--light-text-secondary);
+}
+
+.btn {
+  height: 48px;
+  font-size: 15px;
+  font-weight: 400;
+  border-radius: 8px;
+}
+
+.btn-primary {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+
+  &:hover {
+    background-color: var(--brand-primary-hover);
+    border-color: var(--brand-primary-hover);
+  }
+
+  &:disabled {
+    background-color: var(--brand-secondary);
+    border-color: var(--brand-secondary);
+  }
+}
+
+/* Global utility classes */
+.w-100 {
   width: 100%;
-} 
+}
+
+/* Add any other global styles here */
