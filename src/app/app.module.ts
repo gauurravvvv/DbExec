@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 // NGX Bootstrap Imports
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
@@ -13,8 +13,9 @@ import { AlertModule } from 'ngx-bootstrap/alert';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './pages/login/login.component';
-import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { HttpRequestInterceptor } from './core/interceptor/HttpRequestInterceptor';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,13 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
     TooltipModule.forRoot(),
     AlertModule.forRoot(),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: HttpRequestInterceptor,
+			multi: true,
+		},
+	],
 })
 export class AppModule { } 

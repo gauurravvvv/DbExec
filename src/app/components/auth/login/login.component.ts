@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate, stagger, query } from '@angular/animations';
 import { LOGIN_PAGE_OPTIONS } from 'src/app/constants/global';
+import { LoginService } from '../auth.service';
+import { StorageType } from 'src/app/constants/storageType';
+import { GlobalService } from 'src/app/core/services/global.service';
 
 @Component({
   selector: 'app-login',
@@ -34,18 +37,20 @@ import { LOGIN_PAGE_OPTIONS } from 'src/app/constants/global';
   ]
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   hidePassword = true;
   
   features = LOGIN_PAGE_OPTIONS;
   private readonly encryptionKey = 'your-secret-key-2024'; // You should store this securely
 
   constructor(
-    private fb: FormBuilder,
-    private router: Router
+    private fb: UntypedFormBuilder,
+    private router: Router,
+    private loginService: LoginService,
+    private globalService: GlobalService
   ) {
     this.loginForm = this.fb.group({
-      organization: ['', Validators.required],
+      organisation: ['', Validators.required],
       username: ['', Validators.required],
       password: ['', Validators.required],
       rememberMe: [false]
@@ -54,44 +59,53 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     // Load saved credentials if they exist
-    const savedCredentials = localStorage.getItem('savedCredentials');
+    const savedCredentials = localStorage.getItem(StorageType.SAVED_CREDS);
     if (savedCredentials) {
       try {
         const credentials = JSON.parse(savedCredentials);
         this.loginForm.patchValue({
-          organization: credentials.organization,
+          organisation: credentials.organisation,
           username: credentials.username,
           password: this.decrypt(credentials.password),
           rememberMe: true
         });
       } catch (error) {
         console.error('Error loading saved credentials:', error);
-        localStorage.removeItem('savedCredentials');
+        localStorage.removeItem(StorageType.SAVED_CREDS);
       }
     }
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      const formValue = this.loginForm.value;
-      
-      if (formValue.rememberMe) {
-        // Save credentials with encrypted password
+      const {organisation, username, password, rememberMe } = this.loginForm.value;
+      if (rememberMe) {
         const credentialsToSave = {
-          organization: formValue.organization,
-          username: formValue.username,
-          password: this.encrypt(formValue.password)
+          organisation: organisation,
+          username: username,
+          password: this.encrypt(password)
         };
-        localStorage.setItem('savedCredentials', JSON.stringify(credentialsToSave));
+        localStorage.setItem(StorageType.SAVED_CREDS, JSON.stringify(credentialsToSave));
       } else {
-        // Clear saved credentials if remember me is unchecked
-        localStorage.removeItem('savedCredentials');
+        localStorage.removeItem(StorageType.SAVED_CREDS);
       }
 
-      // Handle login logic
-      console.log('Logging in with:', {
-        ...formValue,
-        password: '********' // Don't log the actual password
+      this.loginService.login(this.loginForm).subscribe({
+        next: (res) => {
+          if (this.globalService.handleServiceResponse(res)) {
+            console.log('route to dashboard');
+            // this.router.navigateByUrl(URL_ROUTES.DASHBOARD);
+          }
+        },
+        error: (error) => {
+          // Handle HTTP errors or error responses
+          const errorMessage = error.error || error;
+          this.globalService.handleServiceResponse({
+            status: false,
+            message: errorMessage.message || 'Login failed',
+            data: null
+          }, true, true);
+        }
       });
     }
   }
