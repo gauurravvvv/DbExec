@@ -5,12 +5,17 @@ import { HomeComponent } from './components/layout/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 
 const routes: Routes = [
   { 
     path: 'login', 
     component: LoginComponent,
     canActivate: [AuthGuard]
+  },
+  { 
+    path: 'forgot-password', 
+    component: ForgotPasswordComponent,
   },
   { 
     path: '', 
