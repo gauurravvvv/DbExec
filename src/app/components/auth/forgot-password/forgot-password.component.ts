@@ -50,7 +50,6 @@ export class ForgotPasswordComponent implements OnInit {
   onSubmit(): void {
     if (this.forgotPasswordForm.valid) {
       // Handle password reset logic
-      console.log(this.forgotPasswordForm.value);
     }
   }
 }

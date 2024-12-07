@@ -4,19 +4,37 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { HomeComponent } from './components/layout/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { 
+    path: 'login', 
+    component: LoginComponent,
+    canActivate: [AuthGuard]
+  },
   { 
     path: '', 
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
+  { 
+    path: 'home', 
     component: HomeComponent,
+    canActivate: [AuthGuard],
     children: [
-      { path: 'profile', component: ProfileComponent },
-      { path: 'settings', component: SettingsComponent },
-      // Add more routes as needed
+      { 
+        path: 'profile', 
+        component: ProfileComponent
+      },
+      { 
+        path: 'settings', 
+        component: SettingsComponent
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
-  }
+  },
+  // Catch all route
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({

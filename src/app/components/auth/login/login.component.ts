@@ -6,7 +6,6 @@ import { LOGIN_PAGE_OPTIONS } from 'src/app/constants/global';
 import { LoginService } from '../auth.service';
 import { StorageType } from 'src/app/constants/storageType';
 import { GlobalService } from 'src/app/core/services/global.service';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -71,7 +70,6 @@ export class LoginComponent implements OnInit {
           rememberMe: true
         });
       } catch (error) {
-        console.error('Error loading saved credentials:', error);
         localStorage.removeItem(StorageType.SAVED_CREDS);
       }
     }
@@ -94,7 +92,7 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.loginForm).subscribe({
         next: (res) => {
           if (this.globalService.handleServiceResponse(res)) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/home'], { replaceUrl: true });
           }
         },
         error: (error) => {

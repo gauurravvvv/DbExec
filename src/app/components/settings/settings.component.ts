@@ -21,6 +21,5 @@ export class SettingsComponent {
 
   saveSettings() {
     // Implement settings save logic
-    console.log('Settings saved:', this.settings);
   }
 } 

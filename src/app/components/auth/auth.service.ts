@@ -1,9 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { UntypedFormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
 import { AUTH } from "src/app/constants/api";
-import { GlobalService } from "src/app/core/services/global.service";
 import { SessionStorageType, StorageType } from "src/app/constants/storageType";
 import { ROLES } from "src/app/constants/user.constant";
 import { map } from "rxjs/operators";
@@ -16,8 +14,6 @@ export class LoginService {
   isForgetPasswordForm = false;
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private globalService: GlobalService
   ) {}
 
   login(loginForm: UntypedFormGroup) {
@@ -60,5 +56,10 @@ export class LoginService {
 
   public setAccessToken(accessToken: string) {
     StorageService.set(StorageType.ACCESS_TOKEN, accessToken);
+  }
+
+  public isLoggedIn() {
+    const accessToken = StorageService.get(StorageType.ACCESS_TOKEN);
+    return accessToken;
   }
 }

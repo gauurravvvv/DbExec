@@ -21,12 +21,13 @@
         position: relative;
         
         .logo-icon {
-          font-size: 2rem;
+          font-size: 2.2rem;
           color: #3498db;
           animation: gentle-zoom 3s ease-in-out infinite;
           display: flex;
           align-items: center;
           justify-content: center;
+          transform-origin: center;
         }
         
         .logo-text {
@@ -187,7 +188,7 @@
     transform: scale(1);
   }
   50% {
-    transform: scale(1.1);
+    transform: scale(1.25);
   }
   100% {
     transform: scale(1);
