@@ -1,0 +1,34 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h2>My Profile</h2>
+  </div>
+  
+  <div class="profile-content">
+    <div class="profile-avatar">
+      <img [src]="userProfile.avatar" alt="Profile Picture">
+      <button class="change-avatar-btn">Change Picture</button>
+    </div>
+    
+    <div class="profile-details">
+      <div class="detail-item">
+        <label>Full Name</label>
+        <p>{{userProfile.name}}</p>
+      </div>
+      
+      <div class="detail-item">
+        <label>Email</label>
+        <p>{{userProfile.email}}</p>
+      </div>
+      
+      <div class="detail-item">
+        <label>Role</label>
+        <p>{{userProfile.role}}</p>
+      </div>
+      
+      <div class="detail-item">
+        <label>Member Since</label>
+        <p>{{userProfile.joinDate | date:'mediumDate'}}</p>
+      </div>
+    </div>
+  </div>
+</div> 

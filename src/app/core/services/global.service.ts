@@ -84,6 +84,8 @@ export class GlobalService {
       switch (value) {
         case 'decodeToken':
           return decodeToken;
+          case 'name':
+            return decodeToken?.name;
         case 'role':
           return decodeToken?.role;
         case 'username':
@@ -96,7 +98,6 @@ export class GlobalService {
           return null;
       }
     } catch (error) {
-      console.error('Error decoding token:', error);
       this.router.navigateByUrl('');
       return null;
     }

@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import Swal from 'sweetalert2';
+import { RouterModule } from '@angular/router';
 
 // NGX Bootstrap Imports
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
@@ -17,12 +17,24 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 import { HttpRequestInterceptor } from './core/interceptor/HttpRequestInterceptor';
+import { HomeComponent } from './components/layout/home/home.component';
+import { HeaderComponent } from './components/layout/header/header.component';
+import { SidebarComponent } from './components/layout/sidebar/sidebar.component';
+import { FooterComponent } from './components/layout/footer/footer.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     ForgotPasswordComponent,
+    HomeComponent,
+    HeaderComponent,
+    SidebarComponent,
+    FooterComponent,
+    ProfileComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +43,7 @@ import { HttpRequestInterceptor } from './core/interceptor/HttpRequestIntercepto
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
+    RouterModule,
     
     // NGX Bootstrap Modules
     ButtonsModule.forRoot(),

@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.loginForm).subscribe({
         next: (res) => {
           if (this.globalService.handleServiceResponse(res)) {
-            console.log('route to dashboard')
+            this.router.navigate(['/']);
           }
         },
         error: (error) => {

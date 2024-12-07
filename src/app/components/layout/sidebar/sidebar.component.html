@@ -1,0 +1,77 @@
+<aside class="sidebar" [class.collapsed]="!isExpanded">
+  <div class="sidebar-content">
+    <nav class="sidebar-nav">
+      <ng-container *ngFor="let mainItem of menuItems">
+        <!-- Main Category -->
+        <div class="category-header">{{ mainItem.title }}</div>
+
+        <!-- Menu Items -->
+        <ul class="nav-list">
+          <ng-container *ngFor="let item of mainItem.children">
+            <li class="nav-item" [class.active]="item.isExpanded">
+              <!-- Menu item with children -->
+              <div *ngIf="item.children" 
+                   class="nav-link"
+                   [style.paddingLeft]="getIndentation(item.level)"
+                   (click)="toggleSubmenu(item)"
+                   [class.expanded]="item.isExpanded">
+                <div class="link-content">
+                  <span class="nav-text">{{ item.title }}</span>
+                </div>
+                <i class="fas fa-chevron-down submenu-arrow" *ngIf="item.children.length > 0"></i>
+              </div>
+
+              <!-- Menu item without children -->
+              <a *ngIf="!item.children" 
+                 [routerLink]="item.route"
+                 routerLinkActive="active"
+                 class="nav-link"
+                 [style.paddingLeft]="getIndentation(item.level)">
+                <div class="link-content">
+                  <span class="nav-text">{{ item.title }}</span>
+                </div>
+                <span class="badge" *ngIf="item.badge">{{ item.badge }}</span>
+              </a>
+
+              <!-- Submenu -->
+              <ul class="submenu" *ngIf="item.children && item.isExpanded">
+                <li *ngFor="let child of item.children" 
+                    class="submenu-item">
+                  <!-- Nested submenu item -->
+                  <div *ngIf="child.children" 
+                       class="submenu-link"
+                       [style.paddingLeft]="getIndentation(child.level)"
+                       (click)="toggleSubmenu(child)"
+                       [class.expanded]="child.isExpanded">
+                    <span>{{ child.title }}</span>
+                    <i class="fas fa-chevron-down" *ngIf="child.children.length > 0"></i>
+                  </div>
+
+                  <!-- Regular submenu item -->
+                  <a *ngIf="!child.children" 
+                     [routerLink]="child.route" 
+                     routerLinkActive="active"
+                     [style.paddingLeft]="getIndentation(child.level)">
+                    {{ child.title }}
+                  </a>
+
+                  <!-- Nested submenu -->
+                  <ul class="nested-submenu" *ngIf="child.children && child.isExpanded">
+                    <li *ngFor="let nestedChild of child.children" 
+                        class="nested-submenu-item">
+                      <a [routerLink]="nestedChild.route" 
+                         routerLinkActive="active"
+                         [style.paddingLeft]="getIndentation(nestedChild.level)">
+                        {{ nestedChild.title }}
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </ng-container>
+    </nav>
+  </div>
+</aside> 
