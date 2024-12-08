@@ -1,10 +1,14 @@
 <aside class="sidebar" [class.collapsed]="!isExpanded" [class.mobile]="isMobile">
-  <div class="sidebar-header">
+  <div class="sidebar-header" *ngIf="!isExpanded">
     <button class="toggle-btn" (click)="toggleSidebar()">
       <i class="fas" [ngClass]="{'fa-chevron-left': isExpanded, 'fa-chevron-right': !isExpanded}"></i>
     </button>
   </div>
   
+  <button *ngIf="isExpanded" class="toggle-btn outside" (click)="toggleSidebar()">
+    <i class="fas" [ngClass]="{'fa-chevron-left': isExpanded, 'fa-chevron-right': !isExpanded}"></i>
+  </button>
+
   <div class="sidebar-content">
     <nav class="sidebar-nav">
       <ng-container *ngFor="let mainItem of menuItems">
@@ -14,13 +18,13 @@
               <!-- Menu item with children -->
               <div *ngIf="item.children" 
                    class="nav-link"
-                   [title]="!isExpanded ? item.title : ''"
+                   [title]="!isExpanded ? item.label : ''"
                    [style.paddingLeft]="getIndentation(item.level)"
                    (click)="toggleSubmenu(item)"
                    [class.expanded]="item.isExpanded">
                 <div class="link-content">
                   <i [class]="item.icon"></i>
-                  <span class="nav-text" [class.hidden]="!isExpanded">{{ item.title }}</span>
+                  <span class="nav-text" [class.hidden]="!isExpanded">{{ item.label }}</span>
                 </div>
                 <i class="fas fa-chevron-down submenu-arrow" 
                    *ngIf="item.children.length > 0 && isExpanded"></i>
@@ -31,11 +35,11 @@
                  [routerLink]="item.route"
                  routerLinkActive="active"
                  class="nav-link"
-                 [title]="!isExpanded ? item.title : ''"
+                 [title]="!isExpanded ? item.label : ''"
                  [style.paddingLeft]="getIndentation(item.level)">
                 <div class="link-content">
                   <i [class]="item.icon"></i>
-                  <span class="nav-text" [class.hidden]="!isExpanded">{{ item.title }}</span>
+                  <span class="nav-text" [class.hidden]="!isExpanded">{{ item.label }}</span>
                 </div>
               </a>
 
@@ -47,26 +51,27 @@
                   <!-- Nested submenu item -->
                   <div *ngIf="child.children" 
                        class="submenu-link"
-                       [title]="!isExpanded ? child.title : ''"
+                       [title]="!isExpanded ? child.label : ''"
                        [style.paddingLeft]="getIndentation(child.level)"
                        (click)="toggleSubmenu(child)"
                        [class.expanded]="child.isExpanded">
                     <div class="link-content">
                       <i [class]="child.icon"></i>
-                      <span class="nav-text" [class.hidden]="!isExpanded">{{ child.title }}</span>
+                      <span class="nav-text" [class.hidden]="!isExpanded">{{ child.label }}</span>
                     </div>
-                    <i class="fas fa-chevron-down submenu-arrow" *ngIf="child.children.length > 0 && isExpanded"></i>
+                    <i class="fas fa-chevron-down submenu-arrow" 
+                       *ngIf="child.children && child.children.length > 0 && isExpanded"></i>
                   </div>
 
                   <!-- Regular submenu item -->
                   <a *ngIf="!child.children" 
                      [routerLink]="child.route" 
                      routerLinkActive="active"
-                     [title]="!isExpanded ? child.title : ''"
+                     [title]="!isExpanded ? child.label : ''"
                      [style.paddingLeft]="getIndentation(child.level)">
                     <div class="link-content">
                       <i [class]="child.icon"></i>
-                      <span class="nav-text" [class.hidden]="!isExpanded">{{ child.title }}</span>
+                      <span class="nav-text" [class.hidden]="!isExpanded">{{ child.label }}</span>
                     </div>
                   </a>
 
@@ -77,11 +82,11 @@
                         [class.visible]="child.isExpanded">
                       <a [routerLink]="nestedChild.route" 
                          routerLinkActive="active"
-                         [title]="!isExpanded ? nestedChild.title : ''"
+                         [title]="!isExpanded ? nestedChild.label : ''"
                          [style.paddingLeft]="getIndentation(nestedChild.level)">
                         <div class="link-content">
                           <i [class]="nestedChild.icon"></i>
-                          <span class="nav-text" [class.hidden]="!isExpanded">{{ nestedChild.title }}</span>
+                          <span class="nav-text" [class.hidden]="!isExpanded">{{ nestedChild.label }}</span>
                         </div>
                       </a>
                     </li>

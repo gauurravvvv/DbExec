@@ -22,7 +22,6 @@ import { HeaderComponent } from './components/layout/header/header.component';
 import { SidebarComponent } from './components/layout/sidebar/sidebar.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -33,8 +32,7 @@ import { SettingsComponent } from './components/settings/settings.component';
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
-    ProfileComponent,
-    SettingsComponent
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

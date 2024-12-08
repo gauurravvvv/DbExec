@@ -1,19 +1,10 @@
-import { Component, HostListener } from '@angular/core';
-import { StorageType } from 'src/app/constants/storageType';
-
-interface Permission {
-  label: string;
-  value?: string;
-  name?: string;
-  status: boolean;
-  icon?: string;
-  subPermissions?: Permission[];
-}
+import { Component, OnInit } from '@angular/core';
+import { MENU_ITEMS } from 'src/app/constants/routes.config';
 
 interface MenuItem {
-  title: string;
+  label: string;
   route?: string;
-  icon?: string;
+  icon: string;
   children?: MenuItem[];
   isExpanded?: boolean;
   level?: number;
@@ -24,70 +15,28 @@ interface MenuItem {
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
+  menuItems: { children: MenuItem[] }[] = [];
   isExpanded = true;
-  isMobile = window.innerWidth <= 768;
-  menuItems: MenuItem[] = [];
+  isMobile = false;
 
   constructor() {
-    this.initializeMenu();
+    // Initialize menu items with the configuration
+    this.menuItems = [{ children: this.processMenuItems(MENU_ITEMS) }];
   }
 
-  private initializeMenu() {
-    const token = localStorage.getItem(StorageType.ACCESS_TOKEN);
-    if (token) {
-      try {
-        const permissions = this.getPermissionsFromToken(token);
-        this.menuItems = this.transformPermissionsToMenu(permissions);
-      } catch (error) {
-        console.error('Error parsing permissions:', error);
-      }
-    }
+  ngOnInit() {
+    this.checkScreenSize();
+    window.addEventListener('resize', () => this.checkScreenSize());
   }
 
-  private getPermissionsFromToken(token: string): Permission[] {
-    const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-    return tokenPayload.permissions || [];
-  }
-
-  private transformPermissionsToMenu(permissions: Permission[]): MenuItem[] {
-    return [{
-      title: 'MENU',
-      isExpanded: true,
-      children: permissions.map(perm => this.createMenuItem(perm, 1))
-    }];
-  }
-
-  private createMenuItem(permission: Permission, level: number): MenuItem {
-    const menuItem: MenuItem = {
-      title: permission.label,
-      level: level,
+  private processMenuItems(items: MenuItem[], level: number = 0): MenuItem[] {
+    return items.map(item => ({
+      ...item,
+      level,
       isExpanded: false,
-      icon: permission.icon
-    };
-
-    if (permission.subPermissions && permission.subPermissions.length > 0) {
-      menuItem.children = permission.subPermissions.map(subPerm => 
-        this.createMenuItem(subPerm, level + 1)
-      );
-    } else {
-      menuItem.route = `/${permission.value || permission.name}`;
-    }
-
-    return menuItem;
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.isMobile = window.innerWidth <= 768;
-    if (this.isMobile) {
-      this.isExpanded = false;
-    }
-  }
-
-  @HostListener('mousemove', ['$event'])
-  onMouseMove(event: MouseEvent) {
-    document.documentElement.style.setProperty('--tooltip-y', `${event.clientY}px`);
+      children: item.children ? this.processMenuItems(item.children, level + 1) : undefined
+    }));
   }
 
   toggleSidebar() {
@@ -95,24 +44,19 @@ export class SidebarComponent {
   }
 
   toggleSubmenu(item: MenuItem) {
-    item.isExpanded = !item.isExpanded;
-    
-    // If we're collapsing this item, collapse all its children recursively
-    if (!item.isExpanded) {
-      this.collapseChildren(item);
-    }
-  }
-
-  private collapseChildren(item: MenuItem) {
     if (item.children) {
-      item.children.forEach(child => {
-        child.isExpanded = false;
-        this.collapseChildren(child);
-      });
+      item.isExpanded = !item.isExpanded;
     }
   }
 
-  getIndentation(level: number = 1): string {
-    return `${(level - 1) * 20}px`;
+  getIndentation(level: number = 0): string {
+    return `${1.5 + level * 1}rem`;
+  }
+
+  private checkScreenSize() {
+    this.isMobile = window.innerWidth <= 768;
+    if (this.isMobile) {
+      this.isExpanded = false;
+    }
   }
 } 

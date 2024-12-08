@@ -1,0 +1,108 @@
+<div class="super-admin-wrapper">
+  <div class="super-admin-container">
+    <div class="page-header">
+      <h2>Super Admin</h2>
+      <button class="add-admin-btn" (click)="onAddNewAdmin()">
+        <i class="fas fa-plus"></i>
+        Add Super Admin
+      </button>
+    </div>
+
+    <div class="table-section">
+      <!-- Search and Page Size -->
+      <div class="table-controls">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input 
+            type="text" 
+            placeholder="Search..." 
+            (input)="onSearch($event)"
+            [value]="searchTerm"
+          >
+        </div>
+        <div class="page-size">
+          <label>Show entries:</label>
+          <select (change)="onPageSizeChange($event)">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Last Login</th>
+              <th>Created Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let admin of filteredAdmins">
+              <td>{{ admin.firstName + ' ' + admin?.lastName }}</td>
+              <td>{{ admin.email }}</td>
+              <td>
+                <span class="status-badge" [class.active]="admin.status === 1">
+                  {{ admin.status === 1 ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td>{{ admin.lastLogin ? (admin.lastLogin | date:'medium') : 'Never logged in' }}</td>
+              <td>{{ admin.createdOn | date:'mediumDate' }}</td>
+              <td class="actions">
+                <button class="action-btn edit" (click)="onEdit(admin)" title="Edit">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn delete" (click)="onDelete(admin)" title="Delete">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <div class="pagination-info">
+            <ng-container *ngIf="totalItems > 0; else noEntries">
+              Showing {{ (currentPage - 1) * pageSize + 1 }} to 
+              {{ Math.min(currentPage * pageSize, totalItems) }} of {{ totalItems }} entries
+            </ng-container>
+            <ng-template #noEntries>
+              Showing 0 to 0 of 0 entries
+            </ng-template>
+          </div>
+          <div class="pagination-controls">
+            <button 
+              [disabled]="currentPage === 1"
+              (click)="onPageChange(currentPage - 1)"
+              class="page-btn"
+            >
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button 
+              *ngFor="let page of pages"
+              (click)="onPageChange(page)"
+              class="page-btn"
+              [class.active]="page === currentPage"
+            >
+              {{ page }}
+            </button>
+            <button 
+              [disabled]="currentPage === totalPages"
+              (click)="onPageChange(currentPage + 1)"
+              class="page-btn"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
