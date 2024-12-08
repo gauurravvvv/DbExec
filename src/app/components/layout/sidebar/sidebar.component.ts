@@ -1,4 +1,14 @@
 import { Component, HostListener } from '@angular/core';
+import { StorageType } from 'src/app/constants/storageType';
+
+interface Permission {
+  label: string;
+  value?: string;
+  name?: string;
+  status: boolean;
+  icon?: string;
+  subPermissions?: Permission[];
+}
 
 interface MenuItem {
   title: string;
@@ -6,8 +16,6 @@ interface MenuItem {
   icon?: string;
   children?: MenuItem[];
   isExpanded?: boolean;
-  badge?: string;
-  isVisible?: boolean;
   level?: number;
 }
 
@@ -19,6 +27,55 @@ interface MenuItem {
 export class SidebarComponent {
   isExpanded = true;
   isMobile = window.innerWidth <= 768;
+  menuItems: MenuItem[] = [];
+
+  constructor() {
+    this.initializeMenu();
+  }
+
+  private initializeMenu() {
+    const token = localStorage.getItem(StorageType.ACCESS_TOKEN);
+    if (token) {
+      try {
+        const permissions = this.getPermissionsFromToken(token);
+        this.menuItems = this.transformPermissionsToMenu(permissions);
+      } catch (error) {
+        console.error('Error parsing permissions:', error);
+      }
+    }
+  }
+
+  private getPermissionsFromToken(token: string): Permission[] {
+    const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+    return tokenPayload.permissions || [];
+  }
+
+  private transformPermissionsToMenu(permissions: Permission[]): MenuItem[] {
+    return [{
+      title: 'MENU',
+      isExpanded: true,
+      children: permissions.map(perm => this.createMenuItem(perm, 1))
+    }];
+  }
+
+  private createMenuItem(permission: Permission, level: number): MenuItem {
+    const menuItem: MenuItem = {
+      title: permission.label,
+      level: level,
+      isExpanded: false,
+      icon: permission.icon
+    };
+
+    if (permission.subPermissions && permission.subPermissions.length > 0) {
+      menuItem.children = permission.subPermissions.map(subPerm => 
+        this.createMenuItem(subPerm, level + 1)
+      );
+    } else {
+      menuItem.route = `/${permission.value || permission.name}`;
+    }
+
+    return menuItem;
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize() {
@@ -33,84 +90,26 @@ export class SidebarComponent {
     document.documentElement.style.setProperty('--tooltip-y', `${event.clientY}px`);
   }
 
-  menuItems: MenuItem[] = [
-    {
-      title: 'COMPONENTS',
-      isExpanded: true,
-      children: [
-        {
-          title: 'UI Elements',
-          icon: 'fas fa-palette',
-          isExpanded: false,
-          level: 1,
-          children: []
-        },
-        {
-          title: 'Forms',
-          icon: 'fas fa-edit',
-          level: 1,
-          badge: '10'
-        },
-        {
-          title: 'Tables',
-          icon: 'fas fa-table',
-          isExpanded: false,
-          level: 1,
-          children: []
-        },
-        {
-          title: 'Charts',
-          icon: 'fas fa-chart-bar',
-          isExpanded: false,
-          level: 1,
-          children: []
-        },
-        {
-          title: 'Icons',
-          icon: 'fas fa-icons',
-          isExpanded: false,
-          level: 1,
-          children: []
-        },
-        {
-          title: 'Maps',
-          icon: 'fas fa-map-marker-alt',
-          isExpanded: false,
-          level: 1,
-          children: []
-        },
-        {
-          title: 'Multi Level',
-          icon: 'fas fa-layer-group',
-          isExpanded: true,
-          level: 1,
-          children: [
-            { 
-              title: 'Level 1.1',
-              route: '/level-1-1',
-              level: 2
-            },
-            { 
-              title: 'Level 1.2',
-              isExpanded: true,
-              level: 2,
-              children: [
-                { title: 'Level 2.1', route: '/level-2-1', level: 3 },
-                { title: 'Level 2.2', route: '/level-2-2', level: 3 }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ];
-
   toggleSidebar() {
     this.isExpanded = !this.isExpanded;
   }
 
   toggleSubmenu(item: MenuItem) {
     item.isExpanded = !item.isExpanded;
+    
+    // If we're collapsing this item, collapse all its children recursively
+    if (!item.isExpanded) {
+      this.collapseChildren(item);
+    }
+  }
+
+  private collapseChildren(item: MenuItem) {
+    if (item.children) {
+      item.children.forEach(child => {
+        child.isExpanded = false;
+        this.collapseChildren(child);
+      });
+    }
   }
 
   getIndentation(level: number = 1): string {
