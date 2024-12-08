@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 interface MenuItem {
   title: string;
@@ -18,6 +18,20 @@ interface MenuItem {
 })
 export class SidebarComponent {
   isExpanded = true;
+  isMobile = window.innerWidth <= 768;
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.isMobile = window.innerWidth <= 768;
+    if (this.isMobile) {
+      this.isExpanded = false;
+    }
+  }
+
+  @HostListener('mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    document.documentElement.style.setProperty('--tooltip-y', `${event.clientY}px`);
+  }
 
   menuItems: MenuItem[] = [
     {
